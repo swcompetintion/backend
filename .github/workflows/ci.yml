@@ -18,7 +18,7 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
     - name: Build the Docker image
-      run: docker build -t bedrock .
+      run: docker build -t creepereye12/bedrock:latest .
     - name: Push to Dockerhub
       run: docker push creepereye12/bedrock:latest
       
