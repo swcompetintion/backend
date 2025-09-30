@@ -13,7 +13,7 @@ jobs:
     runs-on: self-hosted
 
     steps:
-    - uses: Pull Docker image
+    - name: Pull Docker image
       run: sudo docker pull creepereye12/bedrock:latest
     - name: Delete Old docker container
       run: sudo docker rm -f bedrock || true
