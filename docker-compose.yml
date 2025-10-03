@@ -5,5 +5,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    container_name: bedrock
     ports:
       - "8888:8888"
+    networks:
+      - bedrock
+
+networks:
+  bedrock:
+    external: true
