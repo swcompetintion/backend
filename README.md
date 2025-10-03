@@ -4,10 +4,6 @@ make init
 # 실행
 make run
 
-# 커밋
-make commit
-
-
 # TODO
 
 - [ ] 일정 CRUD

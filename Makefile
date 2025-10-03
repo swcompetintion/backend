@@ -6,9 +6,3 @@ init:
 run:
 	uv run uvicorn backend.main:app --reload --host 0.0.0.0 --port 8888
 
-commit:
-	msg=${1:-"Update"}
-	git add .
-	git commit -m "$msg"
-
-
