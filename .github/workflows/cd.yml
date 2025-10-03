@@ -14,19 +14,23 @@ jobs:
 
     steps:
     - name: Pull Docker image
-      run: sudo docker pull creepereye12/bedrock:latest
-      run: sudo docker pull creepereye12/nginx:latest
+      run: |
+        sudo docker pull creepereye12/bedrock:latest 
+        sudo docker pull creepereye12/nginx:latest
 
     - name: Delete Old docker container
-      run: sudo docker rm -f bedrock || true
-      run: sudo docker rm -f nginx || true
+      run: |
+        sudo docker rm -f bedrock || true
+        sudo docker rm -f nginx || true
 
     - name: Run Docker Container
-      run: sudo docker run --name bedrock -d -p 8888:8888 creepereye12/bedrock:latest
-      run: sudo docker run --name nginx -d -p 80:80 -p 443:443 creepereye12/nginx:latest
+      run: |
+        sudo docker run --name bedrock -d -p 8888:8888 creepereye12/bedrock:latest
+        sudo docker run --name nginx -d -p 80:80 -p 443:443 creepereye12/nginx:latest
 
     - name: Delete Docker image
-      run: sudo docker rmi creepereye12/bedrock:latest || true
-      run: sudo docker rmi creepereye12/nginx:latest || true
+      run: |
+        sudo docker rmi creepereye12/bedrock:latest || true
+        sudo docker rmi creepereye12/nginx:latest || true
       
       
