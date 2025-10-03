@@ -2,3 +2,11 @@ Dockerfile
 docker-compose.yml
 .gitignore
 .github/
+README.md
+Makefile
+
+package-lock.json
+package.json
+webpack.config.js
+tsconfig.json
+.babelrc
