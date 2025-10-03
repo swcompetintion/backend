@@ -13,15 +13,18 @@ jobs:
     runs-on: self-hosted
 
     steps:
+
+    - name: Delete all running containers and images
+      run: |
+        sudo docker ps -q | xargs -r sudo docker rm -f
+        sudo docker images -q | xargs -r sudo docker rmi -f
+
     - name: Pull Docker image
       run: |
         sudo docker pull creepereye12/bedrock:latest 
         sudo docker pull creepereye12/nginx:latest
 
-    - name: Delete Old docker container
-      run: |
-        sudo docker rm -f bedrock || true
-        sudo docker rm -f nginx || true
+    
 
     - name: Run Docker Container
       run: |
