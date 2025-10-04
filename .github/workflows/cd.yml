@@ -14,31 +14,31 @@ jobs:
 
     steps:
 
-    - name: Create Network
+    - name: Ensure Docker Network Exists
       run: |
-        sudo docker network create bedrock || true
+        docker network inspect bedrock >/dev/null 2>&1 || docker network create bedrock
 
-
-    - name: Delete all running containers and images
+    - name: Stop and Remove All Containers
       run: |
-        sudo docker ps -q | xargs -r sudo docker rm -f
-        sudo docker images -q | xargs -r sudo docker rmi -f
+        docker ps -q | xargs -r docker stop || true
+        docker ps -aq | xargs -r docker rm -f || true
 
-    - name: Pull Docker image
+    - name: Remove All Docker Images
       run: |
-        sudo docker pull creepereye12/bedrock:latest 
-        sudo docker pull creepereye12/nginx:latest
+        docker images -q | xargs -r docker rmi -f || true
 
-    
-
-    - name: Run Docker Container
+    - name: Pull Latest Docker Images
       run: |
-        sudo docker run --name bedrock -d -p 8888:8888 creepereye12/bedrock:latest
-        sudo docker run --name nginx -d -p 80:80 -p 443:443 creepereye12/nginx:latest
+        docker pull creepereye12/bedrock:latest
+        docker pull creepereye12/nginx:latest
 
-    - name: Delete Docker image
+    - name: Run Docker Containers
       run: |
-        sudo docker rmi creepereye12/bedrock:latest || true
-        sudo docker rmi creepereye12/nginx:latest || true
-      
-      
+        docker run --name bedrock --network bedrock -d -p 8888:8888 creepereye12/bedrock:latest
+        docker run --name nginx --network bedrock -d -p 80:80 -p 443:443 creepereye12/nginx:latest
+
+
+    - name: Optionally Delete Pulled Images
+      run: |
+        docker rmi creepereye12/bedrock:latest || true
+        docker rmi creepereye12/nginx:latest || true
