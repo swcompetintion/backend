@@ -1,5 +1,5 @@
 from pydantic import ConfigDict
-from backend.core.base import Plan
+from src.core.base import Plan
 from beanie import Document
 from typing import Optional
 

@@ -1,8 +1,8 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie, Document
-from backend.core.config import settings
-from backend.models.plans import PlanModel
-from backend.schemas.plans import PlanUpdate
+from src.core.config import settings
+from src.models.plans import PlanModel
+from src.schemas.plans import PlanUpdate
 
 
 async def initialize_database():
@@ -43,5 +43,6 @@ class Database:
         doc = await self.model.find_one(self.model.id == id)
         if doc:
             body_dict = body.model_dump(exclude_unset=True)
-            update_data = {"$set": {k: v for k, v in body_dict.items() if v is not None}}
+            update_data = {"$set": {k: v for k,
+                                    v in body_dict.items() if v is not None}}
             await doc.update(update_data)

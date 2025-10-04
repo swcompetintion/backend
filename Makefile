@@ -4,5 +4,5 @@ init:
 	pip install uv && uv sync
 
 run:
-	uv run uvicorn backend.main:app --reload --host 0.0.0.0 --port 8888
+	uv run uvicorn src.main:app --reload --host 0.0.0.0 --port 8888
 

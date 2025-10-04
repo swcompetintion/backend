@@ -1,8 +1,8 @@
 from fastapi import APIRouter
-from backend.models.plans import PlanModel
-from backend.schemas.plans import PlanUpdate, PlanCreate, PlanResponse
-from backend.database.connection import Database
-from backend.utils.logger import logger
+from src.models.plans import PlanModel
+from src.schemas.plans import PlanUpdate, PlanCreate, PlanResponse
+from src.database.connection import Database
+from src.utils.logger import logger
 plan_router = APIRouter(
     prefix="/plans",
     tags=["plans"]

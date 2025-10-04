@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 # CORS 미들웨어를 임포트합니다.
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.database.connection import initialize_database
+from src.database.connection import initialize_database
 from .routes.plans import plan_router
 from .routes.auths import auth_router
 
@@ -41,8 +41,5 @@ app.add_middleware(
 )
 
 
-
 app.include_router(plan_router)
 app.include_router(auth_router)
-
-

@@ -6,4 +6,4 @@ COPY . /app
 
 RUN pip install uv && uv sync
 
-CMD [".venv/bin/gunicorn", "-c", "backend/gunicorn_conf.py", "backend.main:app"]
+CMD [".venv/bin/gunicorn", "-c", "src/gunicorn_conf.py", "src.main:app"]
