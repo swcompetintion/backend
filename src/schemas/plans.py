@@ -1,33 +1,36 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict
 from typing import Optional
 
 
 class PlanCreate(BaseModel):
-    title: Optional[str] = None
-    description: Optional[str] = None
-    tags: Optional[list[str]] = None
-    location: Optional[str] = None
-    created_at: Optional[str] = None
+    plan_id: Optional[str] = None
+    title: str
+    content: Optional[str] = None
+    important: Optional[bool] = False
+    date: Optional[str] = None
     
     model_config = ConfigDict(extra='allow')
 
 
 class PlanUpdate(BaseModel):
     title: Optional[str] = None
-    description: Optional[str] = None
-    tags: Optional[list[str]] = None
-    location: Optional[str] = None
-    created_at: Optional[str] = None
+    content: Optional[str] = None
+    important: Optional[bool] = None
+    date: Optional[str] = None
     
     model_config = ConfigDict(extra='allow')
 
 
 class PlanResponse(BaseModel):
-    id: Optional[int] = None
-    title: Optional[str] = None
-    description: Optional[str] = None
-    tags: Optional[list[str]] = None
-    location: Optional[str] = None
-    created_at: Optional[str] = None
+    id: str = Field(alias="_id")
+    plan_id: Optional[str] = None
+    title: str
+    content: Optional[str] = None  # description → content  
+    important: Optional[bool] = False
+    date: Optional[str] = None
+    created_at: Optional[str] = None  # datetime → str
     
-    model_config = ConfigDict(extra='allow')
+    model_config = ConfigDict(
+        populate_by_name=True,
+        from_attributes=True
+    )
