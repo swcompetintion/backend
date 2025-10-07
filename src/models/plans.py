@@ -10,7 +10,7 @@ class PlanModel(Plan, Document):
         extra='allow',  # Allow extra fields
         json_schema_extra={
             "example": {
-                "id": 1,
+                "id": '68e4b374fe8048d7bf5336bb',
                 "title": "Plan",
                 "description": "Plan",
                 "tags": ["#test", "#Plan"],
