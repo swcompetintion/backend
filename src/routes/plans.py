@@ -9,7 +9,7 @@ plan_router = APIRouter(
     prefix="/plans",
     tags=["plans"]
 )
-plan_db = Database(UserModel)
+user_db = Database(UserModel)
 
 
 @plan_router.get("/", response_model=list[PlanResponse])
