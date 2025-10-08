@@ -1,36 +1,19 @@
+from decimal import Decimal
+from typing import Annotated
+from datetime import datetime
+from pydantic.types import condecimal
 from pydantic import BaseModel, Field, ConfigDict
-from typing import Optional
+
+Decimal_range = Annotated[
+    Decimal,
+    condecimal(ge=0, le=30, max_digits=3, decimal_places=1)
+]
 
 
-class PlanCreate(BaseModel):
-    plan_id: Optional[str] = None
+class Plan(BaseModel):
     title: str
-    content: Optional[str] = None
-    important: Optional[bool] = False
-    date: Optional[str] = None
-    
-    model_config = ConfigDict(extra='allow')
-
-
-class PlanUpdate(BaseModel):
-    title: Optional[str] = None
-    content: Optional[str] = None
-    important: Optional[bool] = None
-    date: Optional[str] = None
-    
-    model_config = ConfigDict(extra='allow')
-
-
-class PlanResponse(BaseModel):
-    id: str = Field(alias="_id")
-    plan_id: Optional[str] = None
-    title: str
-    content: Optional[str] = None  # description → content  
-    important: Optional[bool] = False
-    date: Optional[str] = None
-    created_at: Optional[str] = None  # datetime → str
-    
-    model_config = ConfigDict(
-        populate_by_name=True,
-        from_attributes=True
-    )
+    content: str | None = None
+    important: Decimal_range = Decimal("0.0")
+    duration: Decimal_range = Decimal("0.0")
+    created_at: datetime = Field(default_factory=datetime.now())
+    model_config = ConfigDict(extra="forbid")

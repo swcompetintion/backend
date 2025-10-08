@@ -15,4 +15,5 @@ dependencies = [
     "pyjwt>=2.8.0",
     "google-auth>=2.29.0",
     "python-multipart>=0.0.9",
+    "pydantic[email]>=2.11.9",
 ]

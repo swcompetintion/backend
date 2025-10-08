@@ -1,46 +1,24 @@
 import os
 from motor.motor_asyncio import AsyncIOMotorClient
-from beanie import init_beanie, Document, PydanticObjectId
+from beanie import init_beanie, Document
 from src.core.config import settings
-from src.models.plans import PlanModel
 from src.models.users import UserModel
-from src.models.jwts import JwtModel
-from src.schemas.plans import PlanUpdate
-
-
-def get_mongodb_url():
-    """환경에 따라 MongoDB URL을 반환"""
-    # 기존 DATABASE_URL이 있으면 사용
-    if settings.DATABASE_URL:
-        return settings.DATABASE_URL
-    
-    # 환경 설정에 따른 기본 URL
-    environment = settings.environment.lower()
-    
-    if environment == 'production' or environment == 'ec2':
-        return os.getenv('DATABASE_URL_PRODUCTION', 'mongodb://localhost:27017/bedrock_prod')
-    elif environment == 'development' or environment == 'dev':
-        return os.getenv('DATABASE_URL_DEV', 'mongodb://localhost:27017/bedrock_dev')
-    elif environment == 'docker':
-        return 'mongodb://mongodb_container:27017/bedrock'
-    else:  # local
-        return os.getenv('DATABASE_URL_LOCAL', 'mongodb://localhost:27017/bedrock')
+from src.models.jwts import RefreshTokenModel
 
 
 async def initialize_database():
     try:
-        URL = get_mongodb_url()
+        URL = os.getenv('DATABASE_URL')
         print(f"MongoDB 연결 시도: {URL}")
         print(f"감지된 환경: {settings.environment}")
-        
+
         client = AsyncIOMotorClient(URL)
-        
-        # 연결 테스트
+
         await client.admin.command('ping')
-        
+
         await init_beanie(
             database=client.get_default_database(),
-            document_models=[PlanModel, UserModel, JwtModel]
+            document_models=[UserModel, RefreshTokenModel]
         )
         print(f"데이터베이스 연결 성공 - Environment: {settings.environment}")
     except Exception as e:
@@ -71,11 +49,12 @@ class Database:
         doc = await self.model.get(PydanticObjectId(id))
         return doc
 
-    async def update(self, id: str, body: PlanUpdate):
+    async def update(self, id: str):
         from beanie import PydanticObjectId
         doc = await self.model.get(PydanticObjectId(id))
         if doc:
             body_dict = body.model_dump(exclude_unset=True)
-            update_data = {"$set": {k: v for k, v in body_dict.items() if v is not None}}
+            update_data = {"$set": {k: v for k,
+                                    v in body_dict.items() if v is not None}}
             await doc.update(update_data)
         return doc

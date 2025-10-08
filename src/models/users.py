@@ -1,24 +1,23 @@
 from beanie import Document
-from typing import Optional, List
-from pydantic import ConfigDict
+from pydantic import ConfigDict, EmailStr
+from ..schemas.plans import Plan
 
 
 class UserModel(Document):
-    user_id: str
-    email: str
-    plans: Optional[List[str]] = []
-    
+    email: EmailStr
+    plans: list[Plan] = []
+
     model_config = ConfigDict(
         extra='allow',
         json_schema_extra={
             "example": {
-                "user_id": "google_123456789",
+                "id": "google_123456789",
                 "email": "user@example.com",
                 "plans": ["68e4b374fe8048d7bf5336bb"]
             }
         }
     )
-    
+
     class Settings:
-        name = "users"
-        indexes = ["user_id", "email"]
+        name = "user"
+        indexes = ["email"]

@@ -1,24 +1,14 @@
-from pydantic import BaseModel, Field, ConfigDict
-from datetime import datetime
+from pydantic import BaseModel, EmailStr
+from datetime import datetime, timedelta
 
 
-class JwtCreate(BaseModel):
+class Jwt(BaseModel):
+    access_token: str
+    refresh_token: str = None
+
+
+class JwtRequest(BaseModel):
     jti: str
-    exp: datetime
-    user_id: str
-    token_type: str = "refresh"
-    
-    model_config = ConfigDict(extra='allow')
-
-
-class JwtResponse(BaseModel):
-    id: str = Field(alias="_id")
-    jti: str
-    exp: datetime
-    user_id: str
-    token_type: str
-    
-    model_config = ConfigDict(
-        populate_by_name=True,
-        from_attributes=True
-    )
+    sub: int
+    email: EmailStr
+    exp: datetime = datetime.now()+timedelta(days=1)

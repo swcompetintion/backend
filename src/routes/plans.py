@@ -1,8 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from beanie import PydanticObjectId
-from src.models.plans import PlanModel
 from src.schemas.plans import PlanUpdate, PlanCreate, PlanResponse
 from src.database.connection import Database
+from src.models.users import UserModel
 from src.utils.logger import logger
 from datetime import datetime
 
@@ -10,7 +9,7 @@ plan_router = APIRouter(
     prefix="/plans",
     tags=["plans"]
 )
-plan_db = Database(PlanModel)
+plan_db = Database(UserModel)
 
 
 @plan_router.get("/", response_model=list[PlanResponse])
@@ -47,16 +46,17 @@ async def get_plan(id: str):
             created_at=plan.created_at
         )
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid ID format: {str(e)}")
+        raise HTTPException(
+            status_code=400, detail=f"Invalid ID format: {str(e)}")
 
 
 @plan_router.post("/")
 async def create_plan(plan: PlanCreate):
     plan_data = plan.model_dump()
-    # 생성 시간 자동 추가
+
     if not plan_data.get('created_at'):
         plan_data['created_at'] = datetime.now().isoformat()
-    
+
     plan_model = PlanModel(**plan_data)
     await plan_db.save(plan_model)
     return {"message": "plan created successfully"}
@@ -68,7 +68,8 @@ async def delete_plan(id: str):
         await plan_db.delete(id)
         return {"message": "plan deleted successfully"}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid ID format: {str(e)}")
+        raise HTTPException(
+            status_code=400, detail=f"Invalid ID format: {str(e)}")
 
 
 @plan_router.put("/{id}")
@@ -77,4 +78,5 @@ async def update_plan(id: str, plan: PlanUpdate):
         await plan_db.update(id, plan)
         return {"message": "plan updated successfully"}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Invalid ID format: {str(e)}")
+        raise HTTPException(
+            status_code=400, detail=f"Invalid ID format: {str(e)}")
