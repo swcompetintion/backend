@@ -1,9 +1,9 @@
 from fastapi import APIRouter, HTTPException
-from src.schemas.plans import PlanUpdate, PlanCreate, PlanResponse
+from src.schemas.plans import Plan
 from src.database.connection import Database
 from src.models.users import UserModel
 from src.utils.logger import logger
-from datetime import datetime
+from typing import List
 
 plan_router = APIRouter(
     prefix="/plans",
@@ -12,71 +12,32 @@ plan_router = APIRouter(
 user_db = Database(UserModel)
 
 
-@plan_router.get("/", response_model=list[PlanResponse])
-async def get_all_plans():
-    logger.info("Fetching all plans")
-    plans = await plan_db.get_all()
-    return [
-        PlanResponse(
-            id=str(plan.id),
-            plan_id=plan.plan_id,
-            title=plan.title,
-            content=plan.content,
-            important=plan.important,
-            date=plan.date,
-            created_at=plan.created_at
-        )
-        for plan in plans
-    ]
-
-
-@plan_router.get("/{id}", response_model=PlanResponse)
-async def get_plan(id: str):
+@plan_router.get("/{user_id}", response_model=List[Plan])
+async def get_user_plans(user_id: str):
+    logger.info(f"Fetching plans for user {user_id}")
     try:
-        plan = await plan_db.get(id)
-        if not plan:
-            raise HTTPException(status_code=404, detail="Plan not found")
-        return PlanResponse(
-            id=str(plan.id),
-            plan_id=plan.plan_id,
-            title=plan.title,
-            content=plan.content,
-            important=plan.important,
-            date=plan.date,
-            created_at=plan.created_at
-        )
+        user = await user_db.get(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+        return user["plans"]
     except Exception as e:
+        logger.error(f"Error fetching plans for user {user_id}: {str(e)}")
         raise HTTPException(
-            status_code=400, detail=f"Invalid ID format: {str(e)}")
+            status_code=500, detail="Failed to fetch user plans")
 
 
-@plan_router.post("/")
-async def create_plan(plan: PlanCreate):
-    plan_data = plan.model_dump()
-
-    if not plan_data.get('created_at'):
-        plan_data['created_at'] = datetime.now().isoformat()
-
-    plan_model = PlanModel(**plan_data)
-    await plan_db.save(plan_model)
-    return {"message": "plan created successfully"}
-
-
-@plan_router.delete("/{id}")
-async def delete_plan(id: str):
+@plan_router.put("/{user_id}")
+async def update_user_plans(user_id: str, plans: List[Plan]):
+    logger.info(f"Updating plans for user {user_id}")
     try:
-        await plan_db.delete(id)
-        return {"message": "plan deleted successfully"}
-    except Exception as e:
-        raise HTTPException(
-            status_code=400, detail=f"Invalid ID format: {str(e)}")
+        user = await user_db.get(user_id)
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
 
+        plans_data = [plan.model_dump() for plan in plans]
+        await user_db.update(user_id, {"plans": plans_data})
 
-@plan_router.put("/{id}")
-async def update_plan(id: str, plan: PlanUpdate):
-    try:
-        await plan_db.update(id, plan)
-        return {"message": "plan updated successfully"}
+        return {"message": "Plans updated successfully"}
     except Exception as e:
-        raise HTTPException(
-            status_code=400, detail=f"Invalid ID format: {str(e)}")
+        logger.error(f"Error updating plans for user {user_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to update plans")

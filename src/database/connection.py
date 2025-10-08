@@ -1,6 +1,8 @@
 import os
+from typing import Type
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie, Document
+from pydantic import BaseModel
 from src.core.config import settings
 from src.models.users import UserModel
 from src.models.jwts import RefreshTokenModel
@@ -27,29 +29,30 @@ async def initialize_database():
 
 
 class Database:
-    def __init__(self, model: Document):
+    def __init__(self, model: Type[Document]):
         self.model = model
 
     async def save(self, document: Document) -> None:
         await document.create()
         return
 
-    async def get_all(self) -> list:
+    async def get_all(self) -> list[Document]:
         docs = await self.model.find_all().to_list()
         return docs
 
-    async def delete(self, id: str):
+    async def delete(self, id: str) -> None:
         from beanie import PydanticObjectId
         doc = await self.model.get(PydanticObjectId(id))
         if doc:
             await doc.delete()
+        return
 
-    async def get(self, id: str):
+    async def get(self, id: str) -> Document | None:
         from beanie import PydanticObjectId
         doc = await self.model.get(PydanticObjectId(id))
         return doc
 
-    async def update(self, id: str):
+    async def update(self, id: str, body: BaseModel) -> Document | None:
         from beanie import PydanticObjectId
         doc = await self.model.get(PydanticObjectId(id))
         if doc:
