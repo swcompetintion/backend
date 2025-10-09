@@ -14,7 +14,7 @@ services:
       DATABASE_URL: ${MONGODB_URL}
 
   mongodb:
-    image: mongo:latest
+    image: mongo:noble
     container_name: mongodb
     ports:
       - "27017:27017"
