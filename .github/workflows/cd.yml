@@ -48,6 +48,7 @@ jobs:
         sudo docker run --name nginx --network bedrock -d -p 80:80 -p 443:443 creepereye12/nginx:latest
 
 
+
     - name: Optionally Delete Pulled Images
       run: |
         sudo docker rmi creepereye12/bedrock:latest || true
