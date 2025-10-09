@@ -42,8 +42,6 @@ jobs:
     - name: Run Docker Containers
       env:
         MONGODB_URL: ${{ secrets.MONGODB_URL }}
-        MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
-        MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
       run: |
         sudo docker compose up -d
         sudo docker run --name nginx --network bedrock -d -p 80:80 -p 443:443 creepereye12/nginx:latest
