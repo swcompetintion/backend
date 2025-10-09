@@ -39,7 +39,7 @@ jobs:
 
     - name: Run Docker Containers
       run: |
-        sudo docker run --name bedrock --network bedrock -d -p 8888:8888 -e DATABASE_URL ${{secrets.DATABASE_URL}} -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }} -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD } creepereye12/bedrock:latest 
+        sudo docker run --name bedrock --network bedrock -p 8888:8888 -e DATABASE_URL=${{ secrets.DATABASE_URL }} -e MONGO_INITDB_ROOT_USERNAME=${{ secrets.MONGO_INITDB_ROOT_USERNAME }} -e MONGO_INITDB_ROOT_PASSWORD=${{ secrets.MONGO_INITDB_ROOT_PASSWORD }} creepereye12/bedrock:latest 
         sudo docker run --name nginx --network bedrock -d -p 80:80 -p 443:443 creepereye12/nginx:latest
 
 
