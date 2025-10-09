@@ -41,7 +41,7 @@ jobs:
         sudo docker pull creepereye12/nginx:latest
 
     - name: Run Docker Containers
-      env: |
+      env:
         MONGODB_URL: ${{ secrets.MONGODB_URL }}
         MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
         MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
