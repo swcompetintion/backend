@@ -13,6 +13,12 @@ jobs:
     runs-on: self-hosted
 
     steps:
+    - name: Docker Init
+      run: |
+        export MONGODB_URL=${{ secrets.MONGODB_URL }} && \
+        export MONGODB_USERNAME=${{ secrets.MONGODB_USERNAME }} && \
+        export MONGODB_PASSWORD=${{ secrets.MONGODB_PASSWORD }}
+        wget https://raw.githubusercontent.com/swcompetintion/backend/refs/heads/main/docker-compose.yml
 
     - name: Docker Login
       run: |
@@ -39,12 +45,7 @@ jobs:
 
     - name: Run Docker Containers
       run: |
-        sudo docker run -d \
-        --name bedrock \
-        --network bedrock \
-        -p 8888:8888 \
-        creepereye12/bedrock:latest
-
+        sudo docker compose up -d
         sudo docker run --name nginx --network bedrock -d -p 80:80 -p 443:443 creepereye12/nginx:latest
 
 
