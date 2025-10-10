@@ -11,15 +11,9 @@ jobs:
   build:
 
     runs-on: self-hosted
-    env:
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    
 
     steps:
-    - name: Docker Init
-      run: |
-        
-        wget https://raw.githubusercontent.com/swcompetintion/backend/refs/heads/main/docker-compose.yml
-
     - name: Docker Login
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
@@ -44,7 +38,7 @@ jobs:
 
     - name: Run Docker Containers
       run: |
-        sudo docker run --name bedrock --network bedrock -d -p 8888:8888 creepereye12/bedrock:latest
+        sudo docker run --name bedrock --network bedrock -d -p 8888:8888 -e DATABASE_URL=${{secrets.DATABASE_URL}} creepereye12/bedrock:latest
         sudo docker run --name nginx --network bedrock -d -p 80:80 -p 443:443 creepereye12/nginx:latest
 
     - name: Optionally Delete Pulled Images
