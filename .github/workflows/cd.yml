@@ -12,11 +12,6 @@ jobs:
 
     runs-on: self-hosted
     steps:
-    - name: Docker Init
-      run: |
-        
-        wget https://raw.githubusercontent.com/swcompetintion/backend/refs/heads/main/docker-compose.yml
-
     - name: Docker Login
       run: |
         echo "${{ secrets.DOCKER_PASSWORD }}" | sudo docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
@@ -44,7 +39,7 @@ jobs:
       env:
         MONGODB_URL: ${{ secrets.MONGODB_URL }}
       run: |
-        sudo docker compose up -d
+        sudo docker run --name bedrock --network bedrock -d -p 8888:8888 creepereye12/bedrock:latest
         sudo docker run --name nginx --network bedrock -d -p 80:80 -p 443:443 creepereye12/nginx:latest
 
     - name: Optionally Delete Pulled Images
