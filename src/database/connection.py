@@ -10,7 +10,7 @@ from src.models.jwts import RefreshTokenModel
 
 async def initialize_database():
     try:
-        URL = os.getenv('DATABASE_URL')
+        URL = settings.DATABASE_URL or os.getenv('DATABASE_URL')
         print(f"MongoDB 연결 시도: {URL}")
         print(f"감지된 환경: {settings.environment}")
 

@@ -12,8 +12,24 @@ services:
       - bedrock
     environment:
       DATABASE_URL: ${MONGODB_URL}
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    networks:
+      - bedrock
+
+
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGODB_PASSWORD}
+
       
+
+
 networks:
   bedrock:
     external: true
- 
