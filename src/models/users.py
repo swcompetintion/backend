@@ -9,6 +9,7 @@ class UserModel(Document):
 
     model_config = ConfigDict(
         extra='allow',
+        arbitrary_types_allowed=True,
         json_schema_extra={
             "example": {
                 "id": "google_123456789",

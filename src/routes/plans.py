@@ -1,43 +1,27 @@
-from fastapi import APIRouter, HTTPException
-from src.schemas.plans import Plan
-from src.database.connection import Database
-from src.models.users import UserModel
-from src.utils.logger import logger
+from fastapi import APIRouter, Depends
 from typing import List
+
+from src.schemas.plans import Plan
+from src.models.users import UserModel
+from src.utils.security import get_current_user
+from src.services.plan_service import PlanService
 
 plan_router = APIRouter(
     prefix="/plans",
     tags=["plans"]
 )
-user_db = Database(UserModel)
 
 
-@plan_router.get("/{user_id}", response_model=List[Plan])
-async def get_user_plans(user_id: str):
-    logger.info(f"Fetching plans for user {user_id}")
-    try:
-        user = await user_db.get(user_id)
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found")
-        return user["plans"]
-    except Exception as e:
-        logger.error(f"Error fetching plans for user {user_id}: {str(e)}")
-        raise HTTPException(
-            status_code=500, detail="Failed to fetch user plans")
+@plan_router.get("", response_model=List[Plan])
+async def get_my_plans(current_user: UserModel = Depends(get_current_user)):
+    return current_user.plans
 
 
-@plan_router.put("/{user_id}")
-async def update_user_plans(user_id: str, plans: List[Plan]):
-    logger.info(f"Updating plans for user {user_id}")
-    try:
-        user = await user_db.get(user_id)
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found")
-
-        plans_data = [plan.model_dump() for plan in plans]
-        await user_db.update(user_id, {"plans": plans_data})
-
-        return {"message": "Plans updated successfully"}
-    except Exception as e:
-        logger.error(f"Error updating plans for user {user_id}: {str(e)}")
-        raise HTTPException(status_code=500, detail="Failed to update plans")
+@plan_router.put("", response_model=List[Plan])
+async def update_my_plans(
+    plans: List[Plan],
+    current_user: UserModel = Depends(get_current_user),
+    plan_service: PlanService = Depends()
+):
+    updated_user = await plan_service.update_user_plans(user=current_user, plans=plans)
+    return updated_user.plans

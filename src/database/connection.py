@@ -12,7 +12,6 @@ async def initialize_database():
     try:
         URL = settings.DATABASE_URL or os.getenv('DATABASE_URL')
         print(f"MongoDB 연결 시도: {URL}")
-        print(f"감지된 환경: {settings.environment}")
 
         client = AsyncIOMotorClient(URL)
 
@@ -22,7 +21,7 @@ async def initialize_database():
             database=client.get_default_database(),
             document_models=[UserModel, RefreshTokenModel]
         )
-        print(f"데이터베이스 연결 성공 - Environment: {settings.environment}")
+
     except Exception as e:
         print(f"데이터베이스 연결 실패: {e}")
         raise
