@@ -42,10 +42,14 @@ jobs:
           --network bedrock \
           -d -p 8888:8888 \
           -e DATABASE_URL="$DATABASE_URL" \
+          -e GOOGLE_CLIENT_ID="$GOOGLE_CLIENT_ID" \
+          -e GOOGLE_CLIENT_SECRET="$GOOGLE_CLIENT_SECRET" \
           creepereye12/bedrock:latest
         sudo docker run --name nginx --network bedrock -d -p 80:80 -p 443:443 creepereye12/nginx:latest
       env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
 
     - name: Optionally Delete Pulled Images
       run: |
