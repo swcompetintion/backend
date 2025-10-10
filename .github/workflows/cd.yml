@@ -41,11 +41,10 @@ jobs:
 
     - name: Run Docker Containers
       env:
-        MONGODB_URL: ${{ secrets.MONGODB_URL }}
-        MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
-        MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        
       run: |
-        sudo docker compose up -d
+        sudo docker run --name bedrock --network bedrock -d -p 8888:8888 creepereye12/bedrock:latest
         sudo docker run --name nginx --network bedrock -d -p 80:80 -p 443:443 creepereye12/nginx:latest
 
     - name: Optionally Delete Pulled Images

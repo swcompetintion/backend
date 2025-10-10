@@ -6,7 +6,7 @@ BASE_DIR = Path(__file__).parent.parent.parent
 
 class Settings(BaseSettings):
 
-    DATABASE_URL: str | None = "mongodb://mongodb_container:27017/bedrock"
+    DATABASE_URL: str | None
 
     GOOGLE_CLIENT_ID: str | None = None
 
