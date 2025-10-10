@@ -1,12 +1,13 @@
 from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
 from pathlib import Path
+import os
 BASE_DIR = Path(__file__).parent.parent.parent
 
 
 class Settings(BaseSettings):
 
-    DATABASE_URL: str | None
+    DATABASE_URL: str | None = os.getenv('DATABASE_URL')
 
     GOOGLE_CLIENT_ID: str | None = None
 
