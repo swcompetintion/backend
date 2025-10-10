@@ -10,7 +10,7 @@ from src.models.jwts import RefreshTokenModel
 
 async def initialize_database():
     try:
-        URL = settings.DATABASE_URL
+        URL = os.getenv('DATABASE_URL')
         print(f"MongoDB 연결 시도: {URL}")
 
         client = AsyncIOMotorClient(URL)
