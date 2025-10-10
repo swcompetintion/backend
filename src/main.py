@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.database.connection import initialize_database
 from .routes.plans import plan_router
 from .routes.auths import auth_router
+from .routes.users import user_router
 
 
 @asynccontextmanager
@@ -38,3 +39,4 @@ app.add_middleware(
 
 app.include_router(plan_router)
 app.include_router(auth_router)
+app.include_router(user_router)

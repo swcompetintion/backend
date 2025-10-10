@@ -16,4 +16,6 @@ dependencies = [
     "google-auth>=2.29.0",
     "python-multipart>=0.0.9",
     "pydantic[email]>=2.11.9",
+    "jose>=1.0.0",
+    "python-jose>=3.5.0",
 ]
