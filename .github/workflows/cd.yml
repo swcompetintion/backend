@@ -42,7 +42,7 @@ jobs:
           --network bedrock \
           -d -p 8888:8888 \
           -e DATABASE_URL="$DATABASE_URL" \
-          creepe/bedrock:latest
+          creepereye12/bedrock:latest
         sudo docker run --name nginx --network bedrock -d -p 80:80 -p 443:443 creepereye12/nginx:latest
       env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
