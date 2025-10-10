@@ -11,6 +11,9 @@ jobs:
   build:
 
     runs-on: self-hosted
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
     steps:
     - name: Docker Init
       run: |
@@ -40,9 +43,6 @@ jobs:
         sudo docker pull creepereye12/nginx:latest
 
     - name: Run Docker Containers
-      env:
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        
       run: |
         sudo docker run --name bedrock --network bedrock -d -p 8888:8888 creepereye12/bedrock:latest
         sudo docker run --name nginx --network bedrock -d -p 80:80 -p 443:443 creepereye12/nginx:latest
