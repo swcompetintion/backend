@@ -12,7 +12,7 @@ Decimal_range = Annotated[
 
 
 class Plan(BaseModel):
-    planId: int | None = None
+    id: int | None = None
     title: str
     content: str | None = None
     important: Decimal_range = Decimal("0.0")
