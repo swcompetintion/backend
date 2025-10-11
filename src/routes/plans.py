@@ -17,11 +17,11 @@ plan_router = APIRouter(
 
 @plan_router.get("/", response_model=List[Plan])
 async def get_my_plans(current_user: UserModel = Depends(get_current_user)):
-    print(f"Fetching plans for user: {current_user.id}")
+
     return current_user.plans
 
 
-@plan_router.put("/", response_model=List[Plan])
+@plan_router.post("/", response_model=List[Plan])
 async def update_my_plans(
     plans: List[Plan],
     current_user: UserModel = Depends(get_current_user),
