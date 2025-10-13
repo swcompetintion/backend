@@ -1,13 +1,15 @@
-from pydantic import ConfigDict
-from pydantic_settings import BaseSettings
+# 코드에 노출되지 않기를 바라는 설정 명시, 도커와 잘 어울림
+from pydantic_settings import BaseSettings,SettingsConfigDict
+#  BaseSettings에는 SettingsConfigDict로 설정 관리
 from pathlib import Path
 import os
 BASE_DIR = Path(__file__).parent.parent.parent
 
 
+
 class Settings(BaseSettings):
 
-    DATABASE_URL: str | None = os.getenv('DATABASE_URL')
+    DATABASE_URL: str | None = None
 
     GOOGLE_CLIENT_ID: str | None = None
 
@@ -25,10 +27,11 @@ class Settings(BaseSettings):
     secret_key: str = "default-secret-key-change-in-production"
     use_https: str = "false"
 
-    model_config = ConfigDict(
+    model_config = SettingsConfigDict(
         env_file=BASE_DIR/".env",
+        env_file_encoding='utf-8',
         extra='allow'
-    )
+    ) #https://docs.pydantic.dev/2.0/usage/pydantic_settings/?utm_source=chatgpt.com#dotenv-env-support
 
 
 settings = Settings()

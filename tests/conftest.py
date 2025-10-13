@@ -1,9 +1,16 @@
-import pytest_asyncio
-from httpx import AsyncClient, ASGITransport
+import pytest_asyncio # 비동기 테스트를 도와주는 pytest용 플러그인, 테스트에서 async def로 쓸 수 있게 해줌
+from httpx import AsyncClient, ASGITransport 
+# AsyncClient: HTTP 요청을 보내고 응답을 받는  클라이언트
+# ASGITransport: AsynClient가 요청을 보낼 때 메모리 안에서 직접 호출하는 전달체(네트워크 계층 건너띄무로 속도 빠름)
 from beanie import init_beanie
+# DB 초기화 및 모델 연결(mongoDB용 ORM) 
 from motor.motor_asyncio import AsyncIOMotorClient
+# motor: MongoDB 공식 비동기 python 드라이버
+# 몽고DB에 비동기로 연결하고 쿼리할 수 있게 해주는 라이브러리
 import asyncio
+# 파이썬의 비동기 엔진
 import re
+# 글자에서 패턴 찾기
 
 from src.main import app
 from src.core.config import settings
