@@ -1,8 +1,9 @@
-import os
 from typing import Type
-from motor.motor_asyncio import AsyncIOMotorClient
+from pymongo import AsyncMongoClient
+from pymongo.errors import ConnectionFailure
 from beanie import init_beanie, Document
 from pydantic import BaseModel
+
 from src.core.config import settings
 from src.models.users import UserModel
 from src.models.jwts import RefreshTokenModel
@@ -10,12 +11,14 @@ from src.models.jwts import RefreshTokenModel
 
 async def initialize_database():
     try:
-        URL = os.getenv('DATABASE_URL')
+        URL = settings.DATABASE_URL
         print(f"MongoDB 연결 시도: {URL}")
+        client = AsyncMongoClient(URL)
 
-        client = AsyncIOMotorClient(URL)
-
-        await client.admin.command('ping')
+        try:
+            await client.admin.command('ping')
+        except ConnectionFailure:
+            print("Server not available")
 
         await init_beanie(
             database=client.get_default_database(),
