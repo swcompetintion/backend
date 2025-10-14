@@ -1,5 +1,6 @@
 from typing import Type
 from pymongo import AsyncMongoClient
+from pymongo.server_api import ServerApi
 from pymongo.errors import ConnectionFailure
 from beanie import init_beanie, Document
 from pydantic import BaseModel
@@ -13,7 +14,7 @@ async def initialize_database():
     try:
         URL = settings.DATABASE_URL
         print(f"MongoDB 연결 시도: {URL}")
-        client = AsyncMongoClient(URL)
+        client = AsyncMongoClient(URL, server_api=ServerApi('1'))
 
         try:
             await client.admin.command('ping')

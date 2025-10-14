@@ -32,4 +32,4 @@ services:
 
 networks:
   bedrock:
-    external: true
+  
