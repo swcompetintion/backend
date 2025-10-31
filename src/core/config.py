@@ -15,8 +15,8 @@ class Settings(BaseSettings):
 
     GOOGLE_CLIENT_SECRET: str | None = None
 # 개발 설정 (기본값)
-    frontend_url: str = "http://localhost:3000"
-    api_port: str = "8000"
+    frontend_url: str = "http://localhost:3002"
+    api_port: str = "8888"
     host: str = "0.0.0.0" # 모든 인터페이스에서 접속 허용, 환경변수로 쉽게 오버라이딩 가능
 
     allowed_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
