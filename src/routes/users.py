@@ -14,8 +14,8 @@ async def delete_user_me(response: Response, current_user: UserModel = Depends(g
 
     await auth_service.delete_all_refresh_tokens_for_user(str(current_user.id))
 
-    await current_user.delete()
+    await current_user.delete() # 몽고 디비에서 사용자 문서 완전 삭제
 
-    response.delete_cookie(key="refresh_token")
+    response.delete_cookie(key="refresh_token") # 클라이언트 쿠키에서 refresh_token 제거
 
     return {"message": "User and all associated tokens have been deleted."}

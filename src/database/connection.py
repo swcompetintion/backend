@@ -24,7 +24,7 @@ async def initialize_database():
         await init_beanie(
             database=client.get_default_database(),
             document_models=[UserModel, RefreshTokenModel]
-        )
+        )  # Beanie ORM 초기화
 
     except Exception as e:
         print(f"데이터베이스 연결 실패: {e}")

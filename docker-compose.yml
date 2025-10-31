@@ -9,7 +9,7 @@ services:
     networks:
       - bedrock
     environment:
-      DATABASE_URL: ${MONGODB_URL}
+      DATABASE_URL: ${DATABASE_URL}
 
   mongodb:
     image: mongo:latest

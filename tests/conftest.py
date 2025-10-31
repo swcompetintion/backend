@@ -45,5 +45,5 @@ async def test_client():
 @pytest_asyncio.fixture(autouse=True)
 async def cleanup_database():
     yield
-    await UserModel.delete_all()
-    await RefreshTokenModel.delete_all()
+    await UserModel.delete_all() # 테스트 후 모든 사용자 삭제
+    await RefreshTokenModel.delete_all() # 모든 토큰 삭제
