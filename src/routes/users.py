@@ -8,6 +8,15 @@ user_router = APIRouter(
     tags=["users"]
 )
 
+@user_router.get("/me", response_model=dict)
+async def get_current_user_info(current_user: UserModel = Depends(get_current_user)):
+    """현재 사용자 정보 조회 - 테스트에서 사용하는 API"""
+    return {
+        "id": str(current_user.id),
+        "email": current_user.email,
+        "created_at": current_user.created_at if hasattr(current_user, 'created_at') else None
+    }
+
 
 @user_router.delete("/me")
 async def delete_user_me(response: Response, current_user: UserModel = Depends(get_current_user), auth_service: AuthService = Depends()):

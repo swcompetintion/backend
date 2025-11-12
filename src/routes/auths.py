@@ -24,7 +24,8 @@ async def google_verify(payload: GoogleVerifyRequest, response: Response, auth_s
     """
     code = payload.code
     token_endpoint = "https://oauth2.googleapis.com/token"
-
+    print(settings.GOOGLE_CLIENT_ID)
+    print(code)
     data = {
         "code": code,
         "client_id": settings.GOOGLE_CLIENT_ID,
@@ -35,7 +36,7 @@ async def google_verify(payload: GoogleVerifyRequest, response: Response, auth_s
 
     async with httpx.AsyncClient() as client:
         token_resp = await client.post(token_endpoint, data=data)
-
+    print(token_resp.json())
     if token_resp.status_code != 200:
         raise HTTPException(status_code=400, detail="Token exchange failed")
 
