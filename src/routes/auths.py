@@ -14,24 +14,15 @@ auth_router = APIRouter(
 
 @auth_router.post("/google-verify")
 async def google_verify(payload: GoogleVerifyRequest, response: Response, auth_service: AuthService = Depends()): # auth_service: AuthService = Depends() AuthService 인스턴스를 자동으로 생성해서 함수에 주입
-    """
-    Google Oayth 플로우
-    1. 프론트에서 Google 인증 코드 받음
-    2. 백엔드에서 Google에 토큰 요청
-    3. Google ID 토큰 검증
-    4. 사용자 생성/조회
-    5. jwt 토큰 발급
-    """
+    redirect_uri = payload.redirect_uri or "postmessage"
     code = payload.code
     token_endpoint = "https://oauth2.googleapis.com/token"
-    print(settings.GOOGLE_CLIENT_ID)
-    print(code)
     data = {
         "code": code,
         "client_id": settings.GOOGLE_CLIENT_ID,
         "client_secret": settings.GOOGLE_CLIENT_SECRET,
-        "redirect_uri": "postmessage", # Google OAuth의 특수 케이스로, 팝업 창에서 부모 창으로 메시지 전달 시 사용
-        "grant_type": "authorization_code",
+        "redirect_uri": redirect_uri,
+        "grant_type": "authorization_code"
     }
 
     async with httpx.AsyncClient() as client:
